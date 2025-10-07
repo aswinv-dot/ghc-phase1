@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLASSIFIED - CASE FILE #2025-NRS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Scanline effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.95; }
+            50% { opacity: 1; }
+            100% { opacity: 0.95; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        .classified-banner {
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(255, 71, 87, 0.6); }
+            50% { opacity: 0.8; box-shadow: 0 0 30px rgba(255, 71, 87, 0.8); }
+        }
+
+        .case-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #00d9ff;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .case-number {
+            color: #00d9ff;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00d9ff;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ff4757;
+            text-shadow: 0 0 20px #ff4757;
+            margin-bottom: 15px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #ff4757, 0 0 30px #ff4757; }
+            50% { text-shadow: 0 0 30px #ff4757, 0 0 40px #ff4757, 0 0 50px #ff4757; }
+        }
+
+        .case-status {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .status-badge {
+            background: rgba(0, 217, 255, 0.2);
+            border: 1px solid #00d9ff;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #00d9ff;
+        }
+
+        /* Profile Cards */
+        .profiles-section {
+            margin: 50px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            color: #00d9ff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00d9ff;
+        }
+
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .profile-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00d9ff;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .profile-card::before {
+            content: "???";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 8em;
+            color: rgba(255, 71, 87, 0.1);
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.5);
+            border-color: #ff4757;
+        }
+
+        .profile-icon {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .profile-label {
+            color: #00d9ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+        }
+
+        .profile-value {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        /* Mystery Box */
+        .mystery-box {
+            background: rgba(255, 71, 87, 0.1);
+            border: 2px dashed #ff4757;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+        }
+
+        .mystery-box::before {
+            content: "?";
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4em;
+            color: #ff4757;
+            background: #1a1a2e;
+            padding: 0 20px;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .mystery-title {
+            font-size: 1.8em;
+            color: #ff4757;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff4757;
+        }
+
+        .mystery-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        /* Reward Section */
+        .reward-section {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.1));
+            border: 3px solid #ffd700;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 50px 0;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+        }
+
+        .reward-title {
+            font-size: 2.5em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #ffd700, 0 0 30px #ffd700;
+            animation: goldGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes goldGlow {
+            0%, 100% { text-shadow: 0 0 20px #ffd700, 0 0 30px #ffd700; }
+            50% { text-shadow: 0 0 30px #ffd700, 0 0 40px #ffd700, 0 0 50px #ff8c00; }
+        }
+
+        .reward-amount {
+            font-size: 4em;
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Form Section */
+        .reveal-section {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00d9ff;
+            border-radius: 15px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .reveal-title {
+            text-align: center;
+            font-size: 2.2em;
+            color: #00d9ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px #00d9ff;
+        }
+
+        .reveal-subtitle {
+            text-align: center;
+            color: #ff4757;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #00d9ff;
+            border-radius: 5px;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+            border-color: #ff4757;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.4em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            letter-spacing: 3px;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 71, 87, 0.6);
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+        }
+
+        .urgency-notice {
+            text-align: center;
+            margin-top: 20px;
+            color: #ffd700;
+            font-size: 1.1em;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reward-amount {
+                font-size: 3em;
+            }
+
+            .reveal-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="classified-banner">
+            🔒 CLASSIFIED - AUTHORIZED PERSONNEL ONLY 🔒
+        </div>
+
+        <div class="case-header">
+            <div class="case-number">CASE FILE #2025-NRS-0987</div>
+            <h1>NURSES ARE MISSING</h1>
+            <div class="case-status">
+                <span class="status-badge">⚠️ STATUS: ACTIVE</span>
+                <span class="status-badge">🔥 PRIORITY: CRITICAL</span>
+                <span class="status-badge">⏰ URGENCY: IMMEDIATE</span>
+            </div>
+        </div>
+
+        <div class="profiles-section">
+            <h2 class="section-title">📋 SUBJECT PROFILE</h2>
+            <div class="profiles-grid">
+                <div class="profile-card">
+                    <div class="profile-icon">📍</div>
+                    <div class="profile-label">LAST KNOWN LOCATION</div>
+                    <div class="profile-value">Near Hospital Premises</div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-icon">🔍</div>
+                    <div class="profile-label">APPROXIMATE AGE</div>
+                    <div class="profile-value">25-35 Years</div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-icon">👔</div>
+                    <div class="profile-label">IDENTIFYING MARKS</div>
+                    <div class="profile-value">Blue Scrubs (Last Seen)</div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-icon">📢</div>
+                    <div class="profile-label">RESPONDS TO</div>
+                    <div class="profile-value">Sister • Nurse • Ma'am • "Help"</div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-icon">⭐</div>
+                    <div class="profile-label">SPECIAL ABILITIES</div>
+                    <div class="profile-value">Multitasking Expert</div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-icon">🌙</div>
+                    <div class="profile-label">KNOWN TRAITS</div>
+                    <div class="profile-value">Night Shift Survivor • Quick Diagnosis</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mystery-box">
+            <h3 class="mystery-title">WHY ARE THEY MISSING?</h3>
+            <p class="mystery-text">
+                Healthcare heroes with exceptional skills have vanished from our radar.
+            </p>
+            <p class="mystery-text">
+                Are you one of them? Do you know where they are?
+            </p>
+            <p class="mystery-text">
+                <strong style="color: #ff4757;">The case remains unsolved...</strong>
+            </p>
+        </div>
+
+        <div class="reward-section">
+            <div class="reward-title">💰 REWARD OFFERED 💰</div>
+            <div class="reward-amount">₹1 LAKH*</div>
+        </div>
+
+        <div class="reveal-section">
+            <h2 class="reveal-title">Join the Search Squad</h2>
+
+            <form id="revealForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdP9GNPb7k_mKrVplqZyuKsw4fDW2TEuTbskzDqRfO0MOvk4Q/formResponse" method="POST" target="hidden_iframe">
+                <div class="form-group">
+                    <label for="name">📝 YOUR NAME</label>
+                    <input type="text" id="name" name="entry.1282745502" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="number">📞 CONTACT NUMBER</label>
+                    <input type="tel" id="number" name="entry.713077699" placeholder="Enter your contact number" required pattern="[0-9]{10}" maxlength="10">
+                </div>
+
+                <div class="form-group">
+                    <label for="occupation">💼 CURRENT OCCUPATION</label>
+                    <input type="text" id="occupation" name="entry.1903734459" placeholder="What do you do?" required>
+                </div>
+
+                <button type="submit" class="submit-btn">SUBMIT INFORMATION</button>
+
+                <p class="urgency-notice">⚠️ Help us find them ⚠️</p>
+            </form>
+            
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('revealForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const number = document.getElementById('number').value;
+            const occupation = document.getElementById('occupation').value;
+            
+            // Validate 10 digit number
+            if (number.length !== 10 || !/^\d{10}$/.test(number)) {
+                alert('⚠️ Please enter a valid 10-digit contact number');
+                return;
+            }
+            
+            // Create a more dramatic alert
+            alert(`🔓 CASE FILE UPDATED\n\nThank you, ${name}!\n\nYour information has been logged in our system.\n\nCase Officer will contact you at:\n${number}\n\nStatus: PENDING VERIFICATION`);
+            
+            this.reset();
+        });
+
+        // Add subtle typing effect to the title
+        const title = document.querySelector('h1');
+        const text = title.textContent;
+        title.textContent = '';
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < text.length) {
+                title.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+        
+        setTimeout(typeWriter, 500);
+    </script>
+</body>
+</html>
